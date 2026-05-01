@@ -1,0 +1,10 @@
+---
+export interface Props {
+  /** Roman numeral chip, e.g. "i", "ii", "iii". */
+  n: string;
+}
+const { n } = Astro.props;
+---
+<h2 class="section">
+  <span class="num">{n}</span><slot />
+</h2>

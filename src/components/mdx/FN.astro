@@ -1,0 +1,7 @@
+---
+export interface Props {
+  n: number | string;
+}
+const { n } = Astro.props;
+---
+<sup class="fn" tabindex="0" role="button" aria-label={`footnote ${n}`}>{n}<span class="fn-pop"><slot /></span></sup>

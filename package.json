@@ -13,10 +13,12 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-grain": "node scripts/generate-paper-grain.mjs"
+    "generate-grain": "node scripts/generate-paper-grain.mjs",
+    "generate-stubs": "node scripts/generate-piece-stubs.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.14",
     "@fontsource/cormorant-garamond": "^5.1.0",
     "@fontsource/quattrocento-sans": "^5.1.0",
     "astro": "^5.0.0",

@@ -1,61 +1,49 @@
 ---
 import { type Lang, t, pathFor } from '~/i18n/dictionary';
+import { getCurrentIssue, getPiecesForIssue, sectionLabelKey } from '~/lib/content';
+
 export interface Props { lang: Lang; }
 const { lang } = Astro.props;
 
-const items: { num: string; secKey: string; titleKey: string; auth: string; pp: string; href?: string }[] = [
-  { num: '01', secKey: 'sec-essay', titleKey: 'toc-1', auth: 'Mariana Cabral',     pp: '2,420 w', href: pathFor(lang, '/essay/the-long-shelf-life-of-a-good-chair') },
-  { num: '02', secKey: 'sec-int',   titleKey: 'toc-2', auth: 'with Tomás Real',     pp: '980 w' },
-  { num: '03', secKey: 'sec-note',  titleKey: 'toc-3', auth: 'Joana Sequeira',      pp: '410 w' },
-  { num: '04', secKey: 'sec-note',  titleKey: 'toc-4', auth: 'Hugo Maertens',       pp: '390 w' },
-  { num: '05', secKey: 'sec-note',  titleKey: 'toc-5', auth: 'Sofía Núñez',         pp: '340 w' },
-  { num: '06', secKey: 'sec-note',  titleKey: 'toc-6', auth: 'Eleni Karagianni',    pp: '450 w' },
-];
+const issue = await getCurrentIssue();
+const pieces = await getPiecesForIssue(issue.data.number, lang);
 ---
 <section class="contents">
   <div class="contents-head reveal">
     <div class="l" set:html={t(lang, 'contents-l')} />
-    <div class="c" set:html={t(lang, 'contents-c')} />
-    <div class="r" set:html={t(lang, 'contents-r')} />
+    <div class="c" set:html={issue.data.contentsBlurb[lang]} />
+    <div class="r">{issue.data.contentsRange}</div>
   </div>
 
   <div class="contents-grid">
-    {items.map((i) => {
+    {pieces.map((p) => {
+      const num = String(p.data.pieceNumber ?? 0).padStart(2, '0');
+      const href = p.data.hasBody ? pathFor(lang, `/essay/${p.data.pieceSlug}`) : null;
       const inner = (
         <>
-          <div class="num">{i.num}</div>
+          <div class="num">{num}</div>
           <div class="body">
-            <div class="sec" set:html={t(lang, i.secKey)} />
-            <div class="ttl" set:html={t(lang, i.titleKey)} />
-            <div class="auth">{i.auth}</div>
+            <div class="sec" set:html={t(lang, sectionLabelKey(p.data.section))} />
+            <div class="ttl" set:html={p.data.title} />
+            <div class="auth">{p.data.author}</div>
           </div>
-          <div class="pp">{i.pp}</div>
+          <div class="pp">{p.data.lengthWords ? `${p.data.lengthWords.toLocaleString(lang === 'pt' ? 'pt-PT' : 'en-GB')} w` : ''}</div>
         </>
       );
-      return i.href
-        ? <a class="toc reveal" href={i.href}>{inner}</a>
+      return href
+        ? <a class="toc reveal" href={href}>{inner}</a>
         : <div class="toc reveal">{inner}</div>;
     })}
   </div>
 
   <div class="fob reveal">
-    <div class="col">
-      <div class="lab" set:html={t(lang, 'fob-l1')} />
-      <h4 set:html={t(lang, 'fob-h1')} />
-      <p set:html={t(lang, 'fob-p1')} />
-      <div class="by" set:html={t(lang, 'fob-by1')} />
-    </div>
-    <div class="col">
-      <div class="lab" set:html={t(lang, 'fob-l2')} />
-      <h4 set:html={t(lang, 'fob-h2')} />
-      <p set:html={t(lang, 'fob-p2')} />
-      <div class="by" set:html={t(lang, 'fob-by2')} />
-    </div>
-    <div class="col">
-      <div class="lab" set:html={t(lang, 'fob-l3')} />
-      <h4 set:html={t(lang, 'fob-h3')} />
-      <p set:html={t(lang, 'fob-p3')} />
-      <div class="by" set:html={t(lang, 'fob-by3')} />
-    </div>
+    {issue.data.frontOfBook.map((col) => (
+      <div class="col">
+        <div class="lab" set:html={col.label[lang]} />
+        <h4 set:html={col.title[lang]} />
+        <p set:html={col.body[lang]} />
+        <div class="by" set:html={col.by[lang]} />
+      </div>
+    ))}
   </div>
 </section>

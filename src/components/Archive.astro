@@ -1,8 +1,13 @@
 ---
 import { type Lang, t, pathFor } from '~/i18n/dictionary';
-import { ARCHIVE } from '~/data/archive';
+import { getAllPieces, getAllIssues, formatDate, formatIssueLabel } from '~/lib/content';
+
 export interface Props { lang: Lang; }
 const { lang } = Astro.props;
+
+const pieces = await getAllPieces(lang);
+const issues = await getAllIssues();
+const count = `${issues.length} ${lang === 'pt' ? 'edições' : 'issues'} · ${pieces.length} ${lang === 'pt' ? 'peças' : 'pieces'}`;
 ---
 <section class="archive">
   <div class="archive-head reveal">
@@ -14,25 +19,25 @@ const { lang } = Astro.props;
       <button class="f" data-filter="note" type="button" set:html={t(lang, 'filt-n')} />
       <button class="f" data-filter="agenda" type="button" set:html={t(lang, 'filt-a')} />
     </div>
-    <div class="count" set:html={t(lang, 'arch-c')} />
+    <div class="count">{count}</div>
   </div>
 
   <div class="archive-rows" id="archiveRows">
-    {ARCHIVE.map((row) => {
-      const href = row.slug ? pathFor(lang, `/essay/${row.slug}`) : undefined;
+    {pieces.map((p) => {
+      const href = p.data.hasBody ? pathFor(lang, `/essay/${p.data.pieceSlug}`) : undefined;
       const inner = (
         <>
-          <div class="iss">{lang === 'pt' ? 'N.º' : 'No.'} {row.iss}</div>
-          <div class="sec">{row.sec}</div>
-          <div class="ttl" set:html={row.ttl[lang]} />
-          <div class="auth">{row.auth[lang]}</div>
-          <div class="when">{row.when[lang]}</div>
+          <div class="iss">{formatIssueLabel(p.data.issue, lang)}</div>
+          <div class="sec">{p.data.section}</div>
+          <div class="ttl" set:html={p.data.title} />
+          <div class="auth">{p.data.author}</div>
+          <div class="when">{formatDate(p.data.date, lang)}</div>
           <div class="arr">→</div>
         </>
       );
       return href
-        ? <a class="archive-row" data-sec={row.sec} href={href}>{inner}</a>
-        : <div class="archive-row" data-sec={row.sec}>{inner}</div>;
+        ? <a class="archive-row" data-sec={p.data.section} href={href}>{inner}</a>
+        : <div class="archive-row" data-sec={p.data.section}>{inner}</div>;
     })}
   </div>
 </section>

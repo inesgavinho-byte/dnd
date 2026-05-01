@@ -1,0 +1,29 @@
+---
+export interface Props {
+  /** Display number, e.g. "fig. 1". */
+  num: string;
+  /** Optional image src; if absent, renders the placeholder silhouette. */
+  src?: string;
+  alt?: string;
+}
+const { num, src, alt } = Astro.props;
+---
+<div class="figure">
+  <div class="frame">
+    {src ? <img src={src} alt={alt ?? ''} /> : null}
+  </div>
+  <div class="cap">
+    <span class="num">{num}</span>
+    <span><slot /></span>
+  </div>
+</div>
+
+<style is:global>
+  .article-body .figure .frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

@@ -1,41 +1,51 @@
 ---
 import { type Lang, t, pathFor } from '~/i18n/dictionary';
+import { getCurrentIssue, getPiece, formatDateNumeric } from '~/lib/content';
+
 export interface Props { lang: Lang; }
 const { lang } = Astro.props;
-const essayHref = pathFor(lang, '/essay/the-long-shelf-life-of-a-good-chair');
+
+const issue = await getCurrentIssue();
+const cover = await getPiece(issue.data.coverPiece, lang);
+if (!cover) throw new Error(`Cover piece not found: ${issue.data.coverPiece} (${lang})`);
+
+const essayHref = pathFor(lang, `/essay/${cover.data.pieceSlug}`);
+const figcap = cover.data.figcap ?? t(lang, 'figcap-l');
 ---
 <section class="cover">
   <div class="cover-grid">
     <div class="cover-lead">
       <div class="kicker reveal">
-        <div set:html={t(lang, 'cover-kick-l')} />
+        <div>{t(lang, 'sec-essay')} · {issue.data.seasonLabel[lang].split('·')[0].trim()}</div>
         <div class="r" set:html={t(lang, 'cover-kick-r')} />
       </div>
       <a href={essayHref} class="cover-headline-link">
-        <h1 class="lede reveal" set:html={t(lang, 'cover-lede')} />
+        <h1 class="lede reveal" set:html={cover.data.title} />
       </a>
-      <p class="deck reveal" set:html={t(lang, 'cover-deck')} />
+      {cover.data.deck && <p class="deck reveal" set:html={cover.data.deck} />}
       <div class="meta reveal">
         <div class="cell">
           <div class="k" set:html={t(lang, 'meta-by')} />
-          <div class="v">Mariana Cabral</div>
+          <div class="v">{cover.data.author}</div>
         </div>
         <div class="cell">
           <div class="k" set:html={t(lang, 'meta-pub')} />
-          <div class="v">12.03.2026</div>
+          <div class="v">{formatDateNumeric(cover.data.date)}</div>
         </div>
-        <div class="cell">
-          <div class="k" set:html={t(lang, 'meta-read')} />
-          <div class="v">14 min</div>
-        </div>
+        {cover.data.readMinutes && (
+          <div class="cell">
+            <div class="k" set:html={t(lang, 'meta-read')} />
+            <div class="v">{cover.data.readMinutes} min</div>
+          </div>
+        )}
       </div>
     </div>
 
-    <a href={essayHref} class="cover-fig reveal" aria-label={t(lang, 'cover-lede').replace(/<[^>]+>/g, '')}>
+    <a href={essayHref} class="cover-fig reveal" aria-label={cover.data.title.replace(/<[^>]+>/g, '')}>
       <div class="photo"><div class="object"></div></div>
       <div class="figcap">
-        <span set:html={t(lang, 'figcap-l')} />
-        <span class="num">fig. 003</span>
+        <span>{figcap}</span>
+        <span class="num">fig. {issue.data.number}</span>
       </div>
     </a>
   </div>
