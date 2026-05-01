@@ -1,0 +1,158 @@
+---
+import { type Lang, t } from '~/i18n/dictionary';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+const en = {
+  open: 'Colophon',
+  composed: 'Composed in Cormorant Garamond 11/14 over Quattrocento Sans, set on a column of 660 pixels.',
+  rendered: 'Rendered 12 March 2026 at 03:14 in Lisboa, by Inês Gavinho.',
+  oldstyle: 'in the year of our Lord',
+  copy: 'You are reading copy',
+  copyOf: 'of an unbounded edition.',
+  received: 'received',
+  welcome: 'welcome back',
+  bookplate: 'Bookplate · Do Not Disturb',
+  ofTheHouse: 'A publication of THE HOUSE.',
+  close: 'Close',
+};
+
+const pt = {
+  open: 'Colofão',
+  composed: 'Composto em Cormorant Garamond 11/14 sobre Quattrocento Sans, numa coluna de 660 píxeis.',
+  rendered: 'Composto a 12 de Março de 2026 às 03:14 em Lisboa, por Inês Gavinho.',
+  oldstyle: 'no ano do Senhor',
+  copy: 'Está a ler a cópia',
+  copyOf: 'de uma edição sem fim.',
+  received: 'recebido',
+  welcome: 'bem-vindo de volta',
+  bookplate: 'Ex-libris · Do Not Disturb',
+  ofTheHouse: 'Uma edição da THE HOUSE.',
+  close: 'Fechar',
+};
+
+const c = lang === 'pt' ? pt : en;
+---
+<div class="colophon" id="colophon" hidden>
+  <div class="colophon-sheet">
+    <button class="colophon-close" type="button" aria-label={c.close}>×</button>
+    <div class="colophon-lab">{c.open}</div>
+    <div class="colophon-bookplate" aria-hidden="true">
+      <svg viewBox="0 0 200 200" width="160" height="160">
+        <rect x="6" y="6" width="188" height="188" fill="none" stroke="currentColor" stroke-width="1" />
+        <rect x="14" y="14" width="172" height="172" fill="none" stroke="currentColor" stroke-width="0.5" />
+        <text x="100" y="56" text-anchor="middle" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="400" font-size="14" fill="currentColor">ex libris</text>
+        <text x="100" y="104" text-anchor="middle" font-family="Cormorant Garamond, serif" font-weight="500" font-size="22" fill="currentColor">DND</text>
+        <text x="100" y="138" text-anchor="middle" font-family="Quattrocento Sans, sans-serif" font-size="8" letter-spacing="3" fill="currentColor">COPY Nº</text>
+        <text x="100" y="160" text-anchor="middle" font-family="Cormorant Garamond, serif" font-weight="500" font-size="20" fill="currentColor" id="bookplate-num">—</text>
+      </svg>
+    </div>
+    <p class="colophon-line">{c.composed}</p>
+    <p class="colophon-line">{c.rendered}</p>
+    <p class="colophon-line colophon-oldstyle">— {c.oldstyle} <em>xij·iij·MMXXVI</em>.</p>
+    <p class="colophon-copy">
+      {c.copy} <span class="copy-num" id="copy-num-colophon">—</span> {c.copyOf}
+    </p>
+    <p class="colophon-foot">{c.ofTheHouse}</p>
+  </div>
+</div>
+
+<style is:global>
+  .colophon {
+    position: fixed;
+    inset: 0;
+    background: rgba(21, 20, 15, 0.55);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .colophon[hidden] { display: none; }
+  .colophon.open { opacity: 1; }
+  .colophon-sheet {
+    background: var(--paper);
+    background-image: url('/paper-grain.png');
+    background-repeat: repeat;
+    background-size: 512px 512px;
+    border: 1px solid var(--rule);
+    padding: 3rem 3rem 2.4rem;
+    max-width: 30rem;
+    width: 100%;
+    text-align: center;
+    color: var(--ink);
+    position: relative;
+    box-shadow: 0 30px 60px rgba(21, 20, 15, 0.18);
+  }
+  .colophon-close {
+    position: absolute;
+    top: 0.6rem; right: 0.8rem;
+    background: transparent; border: 0;
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    color: var(--ink-3);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.2rem 0.4rem;
+  }
+  .colophon-close:hover { color: var(--ink); }
+  .colophon-lab {
+    font-family: var(--sans);
+    font-size: 0.58rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--mark);
+    margin-bottom: 1.4rem;
+  }
+  .colophon-bookplate {
+    color: var(--ink);
+    margin: 0 auto 1.6rem;
+    display: inline-block;
+  }
+  .colophon-line {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 0.6rem;
+  }
+  .colophon-oldstyle em {
+    font-style: italic;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--mark);
+  }
+  .colophon-copy {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink);
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 1rem;
+    margin: 1.2rem 0 0.8rem;
+  }
+  .colophon-copy .copy-num {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--mark);
+    letter-spacing: 0.04em;
+  }
+  .colophon-foot {
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0.8rem 0 0;
+  }
+
+  /* Make the issue-number cell in the substrip look clickable */
+  .mast-substrip > div:last-child {
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  .mast-substrip > div:last-child:hover { color: var(--ink); }
+</style>

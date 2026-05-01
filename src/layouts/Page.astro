@@ -1,7 +1,9 @@
 ---
 import '~/styles/global.css';
+import '~/styles/collectible.css';
 import Masthead from '~/components/Masthead.astro';
 import Footer from '~/components/Footer.astro';
+import Colophon from '~/components/Colophon.astro';
 import { type Lang, t } from '~/i18n/dictionary';
 
 export interface Props {
@@ -35,6 +37,7 @@ const pageDesc = description ?? t(lang, 'mast-c');
     <Masthead lang={lang} current={current} altPath={altPath} />
     <slot />
     <Footer lang={lang} />
+    <Colophon lang={lang} />
 
     <script>
       // ─── progress bar ───
@@ -81,6 +84,10 @@ const pageDesc = description ?? t(lang, 'mast-c');
       document.addEventListener('click', () => {
         document.querySelectorAll('sup.fn.open').forEach((o) => o.classList.remove('open'));
       });
+    </script>
+
+    <script>
+      import '~/scripts/collectible.ts';
     </script>
   </body>
 </html>

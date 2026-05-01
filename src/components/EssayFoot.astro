@@ -2,7 +2,15 @@
 import { type Lang, t } from '~/i18n/dictionary';
 export interface Props { lang: Lang; }
 const { lang } = Astro.props;
+const issueLabel = lang === 'pt' ? 'N.º 003' : 'No. 003';
+const pageLabel = lang === 'pt' ? 'página xiv, recto' : 'page xiv, recto';
+const sigLabel = lang === 'pt' ? 'caderno b · 14 de iv' : 'gathering b · 14 of iv';
 ---
+<div class="folio">
+  <span>{issueLabel}</span>
+  <span class="roman">{pageLabel}</span>
+  <span>{sigLabel}</span>
+</div>
 <div class="article-foot">
   <div class="endmark"></div>
   <div class="author-card">
