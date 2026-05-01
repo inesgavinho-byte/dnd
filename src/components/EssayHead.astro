@@ -1,34 +1,49 @@
 ---
 import { type Lang, t, pathFor } from '~/i18n/dictionary';
-export interface Props { lang: Lang; }
-const { lang } = Astro.props;
+import type { Piece } from '~/lib/content';
+import { formatDateNumeric, formatIssueLabel, sectionLabelKey } from '~/lib/content';
+
+export interface Props {
+  lang: Lang;
+  piece: Piece;
+}
+const { lang, piece } = Astro.props;
+const pieceNum = piece.data.pieceNumber
+  ? (lang === 'pt' ? `n.º ${String(piece.data.pieceNumber).padStart(2, '0')}` : `no. ${String(piece.data.pieceNumber).padStart(2, '0')}`)
+  : '';
 ---
 <section class="article-head">
   <div class="article-crumbs">
-    <a class="crumb" href={pathFor(lang, '/')} set:html={t(lang, 'crumb-iss')} />
+    <a class="crumb" href={pathFor(lang, '/')}>{formatIssueLabel(piece.data.issue, lang)}</a>
     <span class="sep">/</span>
-    <span class="sec" set:html={t(lang, 'sec-essay')} />
-    <span class="sep">/</span>
-    <span set:html={t(lang, 'crumb-no')} />
+    <span class="sec" set:html={t(lang, sectionLabelKey(piece.data.section))} />
+    {pieceNum && <>
+      <span class="sep">/</span>
+      <span>{pieceNum}</span>
+    </>}
   </div>
-  <h1 class="atitle" set:html={t(lang, 'art-title')} />
-  <p class="adeck" set:html={t(lang, 'art-deck')} />
+  <h1 class="atitle" set:html={piece.data.title} />
+  {piece.data.deck && <p class="adeck" set:html={piece.data.deck} />}
   <div class="ameta">
     <div class="cell">
       <span set:html={t(lang, 'meta-by')} />
-      <span class="v">Mariana Cabral</span>
+      <span class="v">{piece.data.author}</span>
     </div>
     <div class="cell">
       <span set:html={t(lang, 'meta-pub')} />
-      <span class="v">12.03.2026</span>
+      <span class="v">{formatDateNumeric(piece.data.date)}</span>
     </div>
-    <div class="cell">
-      <span set:html={t(lang, 'meta-len')} />
-      <span class="v">2,420 {lang === 'pt' ? 'palavras' : 'words'}</span>
-    </div>
-    <div class="cell">
-      <span set:html={t(lang, 'meta-read')} />
-      <span class="v">14 {lang === 'pt' ? 'minutos' : 'minutes'}</span>
-    </div>
+    {piece.data.lengthWords && (
+      <div class="cell">
+        <span set:html={t(lang, 'meta-len')} />
+        <span class="v">{piece.data.lengthWords.toLocaleString(lang === 'pt' ? 'pt-PT' : 'en-GB')} {lang === 'pt' ? 'palavras' : 'words'}</span>
+      </div>
+    )}
+    {piece.data.readMinutes && (
+      <div class="cell">
+        <span set:html={t(lang, 'meta-read')} />
+        <span class="v">{piece.data.readMinutes} {lang === 'pt' ? 'minutos' : 'minutes'}</span>
+      </div>
+    )}
   </div>
 </section>

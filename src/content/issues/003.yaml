@@ -1,0 +1,88 @@
+number: '003'
+date: 2026-03-12
+seasonLabel:
+  en: 'No. 003 · Spring 2026'
+  pt: 'N.º 003 · Primavera 2026'
+pageRange: 'pp. 001 — 048'
+isCurrent: true
+contentsBlurb:
+  en: 'six pieces · one fortnight'
+  pt: 'seis peças · uma quinzena'
+contentsRange: 'pp. 001 — 048'
+coverPiece: 'the-long-shelf-life-of-a-good-chair'
+
+agenda:
+  - when:
+      en: '14 — 28 March'
+      pt: '14 — 28 Março'
+    where:
+      en: 'THE HOUSE · Lisboa'
+      pt: 'THE HOUSE · Lisboa'
+    what:
+      en: 'A reading room of recent acquisitions, open Thursdays only, by appointment.'
+      pt: 'Uma sala de leitura de aquisições recentes, aberta apenas às quintas-feiras, por marcação.'
+  - when:
+      en: '02 April · 19h'
+      pt: '02 Abril · 19h'
+    where:
+      en: 'Conversation'
+      pt: 'Conversa'
+    what:
+      en: '<em>Repair as practice</em>: Mariana Cabral with the bookbinder Júlia Mota.'
+      pt: '<em>Restauro como prática</em>: Mariana Cabral com a encadernadora Júlia Mota.'
+  - when:
+      en: '19 April · 18h30'
+      pt: '19 Abril · 18h30'
+    where:
+      en: 'Lecture'
+      pt: 'Conferência'
+    what:
+      en: 'Lola Vicente: <em>“The first thing I bought was a mistake.”</em>'
+      pt: 'Lola Vicente: <em>“A primeira coisa que comprei foi um erro.”</em>'
+  - when:
+      en: 'May, all month'
+      pt: 'Maio, todo o mês'
+    where:
+      en: 'Closed for installation'
+      pt: 'Encerrado para instalação'
+    what:
+      en: 'No. 005 will be filed from inside the construction.'
+      pt: 'A N.º 005 será composta de dentro da obra.'
+
+frontOfBook:
+  - label:
+      en: 'From the editor'
+      pt: 'Do editor'
+    title:
+      en: 'A note on what we have decided <em>not</em> to write about.'
+      pt: 'Uma nota sobre aquilo que decidimos <em>não</em> escrever.'
+    body:
+      en: 'Each issue of Do Not Disturb begins with the same exercise. We list the announcements we will not be covering this fortnight — the openings, the launches, the press notes that arrived urgently. The list is longer than the issue.'
+      pt: 'Cada edição da Do Not Disturb começa pelo mesmo exercício. Listamos os anúncios que não cobriremos esta quinzena — as inaugurações, os lançamentos, os press notes que chegaram com urgência. A lista é mais longa do que a edição.'
+    by:
+      en: '— Inês Gavinho, editor'
+      pt: '— Inês Gavinho, editora'
+  - label:
+      en: 'Contributors'
+      pt: 'Colaboradores'
+    title:
+      en: 'Six writers, four cities, one shared <em>conviction.</em>'
+      pt: 'Seis autores, quatro cidades, uma <em>convicção</em> partilhada.'
+    body:
+      en: 'Mariana Cabral writes from Porto. Tomás Real from Madrid. Joana Sequeira and Hugo Maertens contribute from Lisboa and Antwerp. Sofía Núñez sends notes from Mexico City; Eleni Karagianni from Athens.'
+      pt: 'Mariana Cabral escreve do Porto. Tomás Real de Madrid. Joana Sequeira e Hugo Maertens contribuem de Lisboa e Antuérpia. Sofía Núñez envia notas da Cidade do México; Eleni Karagianni de Atenas.'
+    by:
+      en: '— full bios in the Authors page'
+      pt: '— biografias na página de autores'
+  - label:
+      en: 'Forthcoming'
+      pt: 'A publicar'
+    title:
+      en: 'No. 004 is being assembled around the question of <em>the commission.</em>'
+      pt: 'A N.º 004 está a ser organizada em torno da questão da <em>encomenda.</em>'
+    body:
+      en: 'A long essay on the economics of being asked to make. An interview with a foundation that has decided to commission less, and slower. Three notes from a season of fairs we are choosing not to attend.'
+      pt: 'Um ensaio longo sobre a economia de ser-se convidado a fazer. Uma entrevista com uma fundação que decidiu encomendar menos, e mais devagar. Três notas de uma temporada de feiras que escolhemos não visitar.'
+    by:
+      en: '— 26 March 2026'
+      pt: '— 26 de Março de 2026'

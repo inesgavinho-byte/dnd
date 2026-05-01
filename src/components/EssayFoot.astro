@@ -1,8 +1,15 @@
 ---
-import { type Lang, t } from '~/i18n/dictionary';
-export interface Props { lang: Lang; }
-const { lang } = Astro.props;
-const issueLabel = lang === 'pt' ? 'N.º 003' : 'No. 003';
+import type { Piece } from '~/lib/content';
+import { formatIssueLabel } from '~/lib/content';
+import type { Lang } from '~/i18n/dictionary';
+
+export interface Props {
+  lang: Lang;
+  piece: Piece;
+}
+const { lang, piece } = Astro.props;
+
+const issueLabel = formatIssueLabel(piece.data.issue, lang);
 const pageLabel = lang === 'pt' ? 'página xiv, recto' : 'page xiv, recto';
 const sigLabel = lang === 'pt' ? 'caderno b · 14 de iv' : 'gathering b · 14 of iv';
 ---
@@ -14,7 +21,7 @@ const sigLabel = lang === 'pt' ? 'caderno b · 14 de iv' : 'gathering b · 14 of
 <div class="article-foot">
   <div class="endmark"></div>
   <div class="author-card">
-    <div class="name">Mariana Cabral</div>
-    <div class="bio" set:html={t(lang, 'bio-mc')} />
+    <div class="name">{piece.data.author}</div>
+    {piece.data.authorBio && <div class="bio" set:html={piece.data.authorBio} />}
   </div>
 </div>

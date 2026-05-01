@@ -1,0 +1,164 @@
+# ─────────────────────────────────────────────────────────────────
+# Sveltia CMS configuration for Do Not Disturb.
+#
+# Source of truth lives in src/content/. The CMS reads/writes those
+# files directly through GitHub. Astro picks up the changes on the
+# next build and renders the site.
+#
+# To switch the CMS to a different repo or branch, edit `backend`.
+# ─────────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: inesgavinho-byte/dnd
+  branch: main
+  base_url: https://auth.sveltia.app   # Sveltia-hosted OAuth proxy
+  # auth_endpoint: oauth   # default
+
+publish_mode: simple        # commit straight to `branch` (no editorial workflow)
+media_folder: public/uploads
+public_folder: /uploads
+
+# Bilingual editing: every entry has en + pt fields rendered side by side.
+i18n:
+  structure: multiple_files
+  locales: [en, pt]
+  default_locale: en
+
+collections:
+  # ── Issues ──────────────────────────────────────────────────────
+  - name: issues
+    label: 'Issues'
+    label_singular: 'Issue'
+    folder: src/content/issues
+    extension: yaml
+    format: yaml
+    create: true
+    slug: '{{number}}'
+    identifier_field: number
+    summary: 'Nº {{number}} · {{date | date("YYYY-MM-DD")}}{{#if isCurrent}} · current{{/if}}'
+    fields:
+      - { name: number, label: 'Number (e.g. 003)', widget: string, pattern: ['^\d{3}$', 'Three-digit number, e.g. 003'] }
+      - { name: date, label: 'Publication date', widget: datetime, time_format: false, picker_utc: true }
+      - name: seasonLabel
+        label: 'Season label'
+        widget: object
+        fields:
+          - { name: en, label: EN, widget: string, hint: 'e.g. "No. 003 · Spring 2026"' }
+          - { name: pt, label: PT, widget: string, hint: 'ex. "N.º 003 · Primavera 2026"' }
+      - { name: pageRange, label: 'Page range', widget: string, hint: 'e.g. "pp. 001 — 048"' }
+      - { name: isCurrent, label: 'Current issue?', widget: boolean, default: false }
+      - name: contentsBlurb
+        label: 'Contents blurb'
+        widget: object
+        fields:
+          - { name: en, label: EN, widget: string }
+          - { name: pt, label: PT, widget: string }
+      - { name: contentsRange, label: 'Contents range', widget: string }
+      - { name: coverPiece, label: 'Cover piece slug', widget: string, hint: 'pieceSlug of the lead essay for this issue' }
+      - name: agenda
+        label: 'Agenda'
+        widget: list
+        required: false
+        fields:
+          - name: when
+            label: When
+            widget: object
+            fields:
+              - { name: en, label: EN, widget: string }
+              - { name: pt, label: PT, widget: string }
+          - name: where
+            label: Where
+            widget: object
+            fields:
+              - { name: en, label: EN, widget: string }
+              - { name: pt, label: PT, widget: string }
+          - name: what
+            label: What
+            widget: object
+            fields:
+              - { name: en, label: EN, widget: string, hint: 'May contain <em>...</em>' }
+              - { name: pt, label: PT, widget: string }
+      - name: frontOfBook
+        label: 'Front of book'
+        widget: list
+        required: false
+        max: 3
+        fields:
+          - name: label
+            label: Label
+            widget: object
+            fields:
+              - { name: en, label: EN, widget: string }
+              - { name: pt, label: PT, widget: string }
+          - name: title
+            label: Title
+            widget: object
+            fields:
+              - { name: en, label: EN, widget: string }
+              - { name: pt, label: PT, widget: string }
+          - name: body
+            label: Body
+            widget: object
+            fields:
+              - { name: en, label: EN, widget: text }
+              - { name: pt, label: PT, widget: text }
+          - name: by
+            label: By
+            widget: object
+            fields:
+              - { name: en, label: EN, widget: string }
+              - { name: pt, label: PT, widget: string }
+
+  # ── Pieces ──────────────────────────────────────────────────────
+  - name: pieces
+    label: 'Pieces'
+    label_singular: 'Piece'
+    folder: src/content/pieces
+    extension: mdx
+    format: frontmatter
+    create: true
+    i18n: true
+    slug: '{{pieceSlug}}'
+    identifier_field: pieceSlug
+    summary: '{{issue}} · {{section}} · {{author}}'
+    sortable_fields: [date, issue, section, pieceNumber]
+    view_filters:
+      - { label: 'Issue 003', field: issue, pattern: '003' }
+      - { label: 'Issue 002', field: issue, pattern: '002' }
+      - { label: 'Issue 001', field: issue, pattern: '001' }
+      - { label: 'Essays', field: section, pattern: 'essay' }
+      - { label: 'Interviews', field: section, pattern: 'interview' }
+      - { label: 'Notes', field: section, pattern: 'note' }
+      - { label: 'Has body', field: hasBody, pattern: 'true' }
+    fields:
+      - { name: pieceSlug, label: 'Piece slug', widget: string, i18n: duplicate, hint: 'lowercase, kebab-case, shared between EN & PT' }
+      - { name: locale, label: Locale, widget: hidden, i18n: true, default: en }
+      - { name: issue, label: Issue, widget: string, i18n: duplicate, pattern: ['^\d{3}$', 'Three-digit, e.g. 003'] }
+      - name: section
+        label: Section
+        widget: select
+        i18n: duplicate
+        options: [essay, interview, note, agenda]
+      - { name: pieceNumber, label: 'Piece number (1–6)', widget: number, value_type: int, min: 1, max: 12, i18n: duplicate, required: false }
+      - { name: title, label: Title, widget: string, i18n: true, hint: 'May contain <em>...</em>' }
+      - { name: deck, label: Deck, widget: text, i18n: true, required: false }
+      - { name: author, label: Author, widget: string, i18n: true }
+      - { name: authorBio, label: 'Author bio', widget: text, i18n: true, required: false }
+      - { name: date, label: Date, widget: datetime, time_format: false, picker_utc: true, i18n: duplicate }
+      - { name: lengthWords, label: 'Length (words)', widget: number, value_type: int, i18n: duplicate, required: false }
+      - { name: readMinutes, label: 'Read time (minutes)', widget: number, value_type: int, i18n: duplicate, required: false }
+      - { name: figcap, label: 'Cover figure caption', widget: string, i18n: true, required: false }
+      - { name: hasBody, label: 'Has body?', widget: boolean, i18n: duplicate, default: false, hint: 'Toggle on when the piece has a real article body' }
+      - name: body
+        label: Body
+        widget: markdown
+        i18n: true
+        required: false
+        modes: [rich_text, raw]
+        editor_components: [code-block, image]
+        hint: |
+          Use the components: <Lede>...</Lede> for the opening paragraph,
+          <PullQuote>...</PullQuote> for pull quotes, <SectionH n="i">...</SectionH>
+          for section headings, <Figure num="fig. 1">caption</Figure>, and
+          <FN n={1}>footnote body</FN> inline.

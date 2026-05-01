@@ -1,18 +1,27 @@
 ---
+import { render } from 'astro:content';
 import Page from '~/layouts/Page.astro';
 import EssayHead from '~/components/EssayHead.astro';
-import EssayBody from '~/components/EssayBody.astro';
 import EssayFoot from '~/components/EssayFoot.astro';
+import { getPieceSlugs, getPiece } from '~/lib/content';
 
 export async function getStaticPaths() {
-  return [{ params: { slug: 'the-long-shelf-life-of-a-good-chair' } }];
+  const slugs = await getPieceSlugs();
+  return slugs.map((slug) => ({ params: { slug } }));
 }
 
 const { slug } = Astro.params;
+const piece = await getPiece(slug!, 'en');
+if (!piece) throw new Error(`Piece not found: ${slug} (en)`);
+
+const { Content } = await render(piece);
 const altPath = `/essay/${slug}`;
+const titleText = piece.data.title.replace(/<[^>]+>/g, '');
 ---
-<Page lang="en" current="essay" altPath={altPath} title="The long shelf life of a good chair">
-  <EssayHead lang="en" />
-  <EssayBody lang="en" />
-  <EssayFoot lang="en" />
+<Page lang="en" current="essay" altPath={altPath} title={titleText} description={piece.data.deck}>
+  <EssayHead lang="en" piece={piece} />
+  <article class="article-body">
+    <Content />
+  </article>
+  <EssayFoot lang="en" piece={piece} />
 </Page>

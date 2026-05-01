@@ -1,9 +1,11 @@
 ---
 import { type Lang, t } from '~/i18n/dictionary';
+import { getCurrentIssue } from '~/lib/content';
+
 export interface Props { lang: Lang; }
 const { lang } = Astro.props;
 
-const items = [1, 2, 3, 4] as const;
+const issue = await getCurrentIssue();
 ---
 <section class="agenda">
   <div class="agenda-head reveal">
@@ -12,11 +14,11 @@ const items = [1, 2, 3, 4] as const;
     <div class="r" set:html={t(lang, 'agenda-r')} />
   </div>
   <div class="agenda-grid reveal">
-    {items.map((i) => (
+    {issue.data.agenda.map((item) => (
       <div class="agenda-item">
-        <div class="when" set:html={t(lang, `ag-${i}-when`)} />
-        <div class="where" set:html={t(lang, `ag-${i}-where`)} />
-        <div class="what" set:html={t(lang, `ag-${i}`)} />
+        <div class="when" set:html={item.when[lang]} />
+        <div class="where" set:html={item.where[lang]} />
+        <div class="what" set:html={item.what[lang]} />
       </div>
     ))}
   </div>
