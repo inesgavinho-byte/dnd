@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Do Not Disturb — a publication on collectible design and contemporary material culture. Published by THE HOUSE, Lisboa.",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
