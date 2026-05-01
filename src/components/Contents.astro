@@ -1,0 +1,61 @@
+---
+import { type Lang, t, pathFor } from '~/i18n/dictionary';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+const items: { num: string; secKey: string; titleKey: string; auth: string; pp: string; href?: string }[] = [
+  { num: '01', secKey: 'sec-essay', titleKey: 'toc-1', auth: 'Mariana Cabral',     pp: '2,420 w', href: pathFor(lang, '/essay/the-long-shelf-life-of-a-good-chair') },
+  { num: '02', secKey: 'sec-int',   titleKey: 'toc-2', auth: 'with Tomás Real',     pp: '980 w' },
+  { num: '03', secKey: 'sec-note',  titleKey: 'toc-3', auth: 'Joana Sequeira',      pp: '410 w' },
+  { num: '04', secKey: 'sec-note',  titleKey: 'toc-4', auth: 'Hugo Maertens',       pp: '390 w' },
+  { num: '05', secKey: 'sec-note',  titleKey: 'toc-5', auth: 'Sofía Núñez',         pp: '340 w' },
+  { num: '06', secKey: 'sec-note',  titleKey: 'toc-6', auth: 'Eleni Karagianni',    pp: '450 w' },
+];
+---
+<section class="contents">
+  <div class="contents-head reveal">
+    <div class="l" set:html={t(lang, 'contents-l')} />
+    <div class="c" set:html={t(lang, 'contents-c')} />
+    <div class="r" set:html={t(lang, 'contents-r')} />
+  </div>
+
+  <div class="contents-grid">
+    {items.map((i) => {
+      const inner = (
+        <>
+          <div class="num">{i.num}</div>
+          <div class="body">
+            <div class="sec" set:html={t(lang, i.secKey)} />
+            <div class="ttl" set:html={t(lang, i.titleKey)} />
+            <div class="auth">{i.auth}</div>
+          </div>
+          <div class="pp">{i.pp}</div>
+        </>
+      );
+      return i.href
+        ? <a class="toc reveal" href={i.href}>{inner}</a>
+        : <div class="toc reveal">{inner}</div>;
+    })}
+  </div>
+
+  <div class="fob reveal">
+    <div class="col">
+      <div class="lab" set:html={t(lang, 'fob-l1')} />
+      <h4 set:html={t(lang, 'fob-h1')} />
+      <p set:html={t(lang, 'fob-p1')} />
+      <div class="by" set:html={t(lang, 'fob-by1')} />
+    </div>
+    <div class="col">
+      <div class="lab" set:html={t(lang, 'fob-l2')} />
+      <h4 set:html={t(lang, 'fob-h2')} />
+      <p set:html={t(lang, 'fob-p2')} />
+      <div class="by" set:html={t(lang, 'fob-by2')} />
+    </div>
+    <div class="col">
+      <div class="lab" set:html={t(lang, 'fob-l3')} />
+      <h4 set:html={t(lang, 'fob-h3')} />
+      <p set:html={t(lang, 'fob-p3')} />
+      <div class="by" set:html={t(lang, 'fob-by3')} />
+    </div>
+  </div>
+</section>

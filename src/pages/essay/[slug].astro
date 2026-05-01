@@ -1,0 +1,18 @@
+---
+import Page from '~/layouts/Page.astro';
+import EssayHead from '~/components/EssayHead.astro';
+import EssayBody from '~/components/EssayBody.astro';
+import EssayFoot from '~/components/EssayFoot.astro';
+
+export async function getStaticPaths() {
+  return [{ params: { slug: 'the-long-shelf-life-of-a-good-chair' } }];
+}
+
+const { slug } = Astro.params;
+const altPath = `/essay/${slug}`;
+---
+<Page lang="en" current="essay" altPath={altPath} title="The long shelf life of a good chair">
+  <EssayHead lang="en" />
+  <EssayBody lang="en" />
+  <EssayFoot lang="en" />
+</Page>

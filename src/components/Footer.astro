@@ -1,0 +1,49 @@
+---
+import { type Lang, t, pathFor } from '~/i18n/dictionary';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+---
+<footer>
+  <div class="foot">
+    <div class="news">
+      <h5 set:html={t(lang, 'news-h')} />
+      <p class="lede" set:html={t(lang, 'news-l')} />
+      <form class="form" method="post" action="#">
+        <input type="email" placeholder={t(lang, 'news-ph')} aria-label="email" />
+        <button type="submit" set:html={t(lang, 'news-btn')} />
+      </form>
+    </div>
+    <div>
+      <h5 set:html={t(lang, 'foot-pub')} />
+      <ul>
+        <li><a href={pathFor(lang, '/')} set:html={t(lang, 'foot-current')} /></li>
+        <li><a href={pathFor(lang, '/archive')} set:html={t(lang, 'foot-archive')} /></li>
+        <li><a href={pathFor(lang, '/authors')} set:html={t(lang, 'foot-auth')} /></li>
+        <li><a href="/rss.xml" set:html={t(lang, 'foot-rss')} /></li>
+      </ul>
+    </div>
+    <div>
+      <h5 set:html={t(lang, 'foot-house')} />
+      <ul>
+        <li><a href={pathFor(lang, '/about')} set:html={t(lang, 'foot-about')} /></li>
+        <li><span set:html={t(lang, 'foot-prog')} /></li>
+        <li><span set:html={t(lang, 'foot-cont')} /></li>
+        <li><span set:html={t(lang, 'foot-pra')} /></li>
+      </ul>
+    </div>
+    <div>
+      <h5 set:html={t(lang, 'foot-leg')} />
+      <ul>
+        <li><span set:html={t(lang, 'foot-pri')} /></li>
+        <li><span set:html={t(lang, 'foot-tre')} /></li>
+        <li><span set:html={t(lang, 'foot-coo')} /></li>
+        <li><span set:html={t(lang, 'foot-acc')} /></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-base">
+    <div set:html={t(lang, 'foot-rights')} />
+    <div class="center" set:html={t(lang, 'foot-tag')} />
+    <div set:html={t(lang, 'foot-set')} />
+  </div>
+</footer>

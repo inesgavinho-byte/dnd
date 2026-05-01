@@ -1,0 +1,39 @@
+---
+import { type Lang, t } from '~/i18n/dictionary';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+---
+<section class="about">
+  <div class="about-head reveal">
+    <div class="lab" set:html={t(lang, 'about-lab')} />
+    <h2 set:html={t(lang, 'about-h')} />
+  </div>
+  <div class="about-grid reveal">
+    <div>
+      <p set:html={t(lang, 'about-p1')} />
+      <p set:html={t(lang, 'about-p2')} />
+    </div>
+    <div>
+      <p set:html={t(lang, 'about-p3')} />
+      <p set:html={t(lang, 'about-p4')} />
+    </div>
+  </div>
+
+  <div class="about-principles reveal">
+    <div class="p">
+      <div class="num">i.</div>
+      <h3 set:html={t(lang, 'about-pr-1')} />
+      <p set:html={t(lang, 'about-pr-1p')} />
+    </div>
+    <div class="p">
+      <div class="num">ii.</div>
+      <h3 set:html={t(lang, 'about-pr-2')} />
+      <p set:html={t(lang, 'about-pr-2p')} />
+    </div>
+    <div class="p">
+      <div class="num">iii.</div>
+      <h3 set:html={t(lang, 'about-pr-3')} />
+      <p set:html={t(lang, 'about-pr-3p')} />
+    </div>
+  </div>
+</section>
