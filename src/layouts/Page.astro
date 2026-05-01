@@ -1,0 +1,86 @@
+---
+import '~/styles/global.css';
+import Masthead from '~/components/Masthead.astro';
+import Footer from '~/components/Footer.astro';
+import { type Lang, t } from '~/i18n/dictionary';
+
+export interface Props {
+  lang: Lang;
+  current: 'home' | 'archive' | 'about' | 'essay' | 'newsletter';
+  title?: string;
+  description?: string;
+  altPath?: string;
+}
+
+const { lang, current, title, description, altPath = '/' } = Astro.props;
+
+const pageTitle = title
+  ? `${title} — Do Not Disturb`
+  : 'Do Not Disturb — a publication on collectible design';
+const pageDesc = description ?? t(lang, 'mast-c');
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <Masthead lang={lang} current={current} altPath={altPath} />
+    <slot />
+    <Footer lang={lang} />
+
+    <script>
+      // ─── progress bar ───
+      const progressEl = document.getElementById('progress');
+      function updateProgress() {
+        if (!progressEl) return;
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        const p = h > 0 ? (window.scrollY / h) * 100 : 0;
+        progressEl.style.width = p + '%';
+      }
+      document.addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
+
+      // ─── reveal on scroll ───
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      document.querySelectorAll('.reveal:not(.in)').forEach((el) => io.observe(el));
+      // Safety net for elements already intersecting on load.
+      setTimeout(() => {
+        document.querySelectorAll('.reveal:not(.in)').forEach((el) => {
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('in');
+        });
+      }, 250);
+
+      // ─── footnote popovers (touch-accessible) ───
+      document.querySelectorAll('sup.fn').forEach((sup) => {
+        sup.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          const wasOpen = sup.classList.contains('open');
+          document.querySelectorAll('sup.fn.open').forEach((o) => o.classList.remove('open'));
+          if (!wasOpen) sup.classList.add('open');
+        });
+      });
+      document.addEventListener('click', () => {
+        document.querySelectorAll('sup.fn.open').forEach((o) => o.classList.remove('open'));
+      });
+    </script>
+  </body>
+</html>

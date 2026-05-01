@@ -1,0 +1,23 @@
+---
+import { type Lang, t } from '~/i18n/dictionary';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+
+const items = [1, 2, 3, 4] as const;
+---
+<section class="agenda">
+  <div class="agenda-head reveal">
+    <div class="l" set:html={t(lang, 'agenda-l')} />
+    <div></div>
+    <div class="r" set:html={t(lang, 'agenda-r')} />
+  </div>
+  <div class="agenda-grid reveal">
+    {items.map((i) => (
+      <div class="agenda-item">
+        <div class="when" set:html={t(lang, `ag-${i}-when`)} />
+        <div class="where" set:html={t(lang, `ag-${i}-where`)} />
+        <div class="what" set:html={t(lang, `ag-${i}`)} />
+      </div>
+    ))}
+  </div>
+</section>

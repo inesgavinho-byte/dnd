@@ -1,0 +1,12 @@
+---
+import { type Lang, t } from '~/i18n/dictionary';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+---
+<div class="article-foot">
+  <div class="endmark"></div>
+  <div class="author-card">
+    <div class="name">Mariana Cabral</div>
+    <div class="bio" set:html={t(lang, 'bio-mc')} />
+  </div>
+</div>

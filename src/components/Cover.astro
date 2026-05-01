@@ -1,0 +1,46 @@
+---
+import { type Lang, t, pathFor } from '~/i18n/dictionary';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const essayHref = pathFor(lang, '/essay/the-long-shelf-life-of-a-good-chair');
+---
+<section class="cover">
+  <div class="cover-grid">
+    <div class="cover-lead">
+      <div class="kicker reveal">
+        <div set:html={t(lang, 'cover-kick-l')} />
+        <div class="r" set:html={t(lang, 'cover-kick-r')} />
+      </div>
+      <a href={essayHref} class="cover-headline-link">
+        <h1 class="lede reveal" set:html={t(lang, 'cover-lede')} />
+      </a>
+      <p class="deck reveal" set:html={t(lang, 'cover-deck')} />
+      <div class="meta reveal">
+        <div class="cell">
+          <div class="k" set:html={t(lang, 'meta-by')} />
+          <div class="v">Mariana Cabral</div>
+        </div>
+        <div class="cell">
+          <div class="k" set:html={t(lang, 'meta-pub')} />
+          <div class="v">12.03.2026</div>
+        </div>
+        <div class="cell">
+          <div class="k" set:html={t(lang, 'meta-read')} />
+          <div class="v">14 min</div>
+        </div>
+      </div>
+    </div>
+
+    <a href={essayHref} class="cover-fig reveal" aria-label={t(lang, 'cover-lede').replace(/<[^>]+>/g, '')}>
+      <div class="photo"><div class="object"></div></div>
+      <div class="figcap">
+        <span set:html={t(lang, 'figcap-l')} />
+        <span class="num">fig. 003</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<style is:global>
+  .cover-headline-link { color: inherit; display: block; }
+</style>

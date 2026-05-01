@@ -1,0 +1,53 @@
+---
+import { type Lang, t, pathFor } from '~/i18n/dictionary';
+import { ARCHIVE } from '~/data/archive';
+export interface Props { lang: Lang; }
+const { lang } = Astro.props;
+---
+<section class="archive">
+  <div class="archive-head reveal">
+    <h2 set:html={t(lang, 'arch-h')} />
+    <div class="archive-filters" role="tablist">
+      <button class="f active" data-filter="all" type="button" set:html={t(lang, 'filt-all')} />
+      <button class="f" data-filter="essay" type="button" set:html={t(lang, 'filt-e')} />
+      <button class="f" data-filter="interview" type="button" set:html={t(lang, 'filt-i')} />
+      <button class="f" data-filter="note" type="button" set:html={t(lang, 'filt-n')} />
+      <button class="f" data-filter="agenda" type="button" set:html={t(lang, 'filt-a')} />
+    </div>
+    <div class="count" set:html={t(lang, 'arch-c')} />
+  </div>
+
+  <div class="archive-rows" id="archiveRows">
+    {ARCHIVE.map((row) => {
+      const href = row.slug ? pathFor(lang, `/essay/${row.slug}`) : undefined;
+      const inner = (
+        <>
+          <div class="iss">{lang === 'pt' ? 'N.º' : 'No.'} {row.iss}</div>
+          <div class="sec">{row.sec}</div>
+          <div class="ttl" set:html={row.ttl[lang]} />
+          <div class="auth">{row.auth[lang]}</div>
+          <div class="when">{row.when[lang]}</div>
+          <div class="arr">→</div>
+        </>
+      );
+      return href
+        ? <a class="archive-row" data-sec={row.sec} href={href}>{inner}</a>
+        : <div class="archive-row" data-sec={row.sec}>{inner}</div>;
+    })}
+  </div>
+</section>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('.archive-filters .f');
+  const rows = document.querySelectorAll<HTMLElement>('.archive-row');
+  filters.forEach((b) => {
+    b.addEventListener('click', () => {
+      filters.forEach((x) => x.classList.toggle('active', x === b));
+      const filter = b.dataset.filter;
+      rows.forEach((r) => {
+        const hide = filter && filter !== 'all' && r.dataset.sec !== filter;
+        r.classList.toggle('hidden', !!hide);
+      });
+    });
+  });
+</script>

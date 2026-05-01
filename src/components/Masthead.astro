@@ -1,0 +1,60 @@
+---
+import { type Lang, t, pathFor } from '~/i18n/dictionary';
+export interface Props {
+  lang: Lang;
+  current: 'home' | 'archive' | 'about' | 'essay' | 'newsletter';
+  altPath?: string;
+}
+const { lang, current, altPath = '/' } = Astro.props;
+const otherLang: Lang = lang === 'en' ? 'pt' : 'en';
+const otherHref = pathFor(otherLang, altPath);
+
+const navItems: { key: 'home' | 'essay' | 'archive' | 'about' | 'newsletter'; i18n: string; href: string }[] = [
+  { key: 'home',       i18n: 'nav-current',    href: pathFor(lang, '/') },
+  { key: 'essay',      i18n: 'nav-essay',      href: pathFor(lang, '/essay/the-long-shelf-life-of-a-good-chair') },
+  { key: 'archive',    i18n: 'nav-archive',    href: pathFor(lang, '/archive') },
+  { key: 'about',      i18n: 'nav-about',      href: pathFor(lang, '/about') },
+  { key: 'newsletter', i18n: 'nav-newsletter', href: pathFor(lang, '/newsletter') },
+];
+---
+<header class="mast">
+  <div class="mast-top">
+    <div class="l">
+      <span set:html={t(lang, 'mast-l1')} />
+      <span set:html={t(lang, 'mast-l2')} />
+    </div>
+    <div class="c" set:html={t(lang, 'mast-c')} />
+    <div class="r">
+      <button class="search" type="button">
+        <span class="search-glyph"></span><span>{t(lang, 'search')}</span>
+      </button>
+      <span class="lang">
+        <a href={pathFor('en', altPath)} class:list={[{ active: lang === 'en' }]} hreflang="en">EN</a>
+        <span class="sep">/</span>
+        <a href={pathFor('pt', altPath)} class:list={[{ active: lang === 'pt' }]} hreflang="pt">PT</a>
+      </span>
+    </div>
+  </div>
+
+  <div class="wordmark-band">
+    <a href={pathFor(lang, '/')} class="wordmark-link" aria-label="Do Not Disturb — home">
+      <h1 class="wordmark" id="wordmark">Do Not Disturb</h1>
+    </a>
+  </div>
+
+  <nav class="mast-nav">
+    {navItems.map((n) => (
+      <a class:list={['navcell', { active: current === n.key }]} href={n.href} set:html={t(lang, n.i18n)} />
+    ))}
+  </nav>
+
+  <div class="mast-substrip">
+    <div set:html={t(lang, 'sub-l')} />
+    <div class="center" set:html={t(lang, 'sub-c')} />
+    <div set:html={t(lang, 'sub-r')} />
+  </div>
+</header>
+
+<style is:global>
+  .wordmark-link { color: inherit; display: inline-block; }
+</style>
