@@ -11,10 +11,10 @@
   </head>
   <body>
     <!--
-      Sveltia CMS — drop-in compatible with Decap (formerly Netlify CMS)
-      configurations. Mount at /admin/. Auth is via GitHub OAuth using
-      Sveltia's hosted auth proxy (https://auth.sveltia.app); to self-host
-      auth later, swap in a custom backend.base_url in config.yml.
+      Sveltia CMS — drop-in compatible with Decap (formerly Netlify CMS).
+      Mount at /admin/. Auth flows through Netlify's built-in OAuth proxy
+      (api.netlify.com); see public/admin/config.yml for the one-time
+      GitHub OAuth App setup.
     -->
     <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"
             type="text/javascript"></script>
